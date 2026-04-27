@@ -1,0 +1,16 @@
+Array
+(
+    [partnerCode] => MOMOBKUN20180529
+    [orderId] => 1777198400
+    [requestId] => 1777198400
+    [amount] => 250000
+    [responseTime] => 1777198401196
+    [message] => Thành công.
+    [resultCode] => 0
+    [payUrl] => https://test-payment.momo.vn/v2/gateway/pay?t=TU9NT0JLVU4yMDE4MDUyOXwxNzc3MTk4NDAw&s=e084253506d2b64d7155857cb1d7086bf650f8532c182d6db7e31c09812e68f2
+    [deeplink] => momo://app?action=payWithApp&isScanQR=false&scanQR=false&serviceType=app&sid=TU9NT0JLVU4yMDE4MDUyOXwxNzc3MTk4NDAw&v=3.0
+    [qrCodeUrl] => 00020101021226110007vn.momo38620010A00000072701320006970454011899MM26116O000002080208QRIBFTTA530370454062500005802VN62480515MMTFWG0JQPRRnQR070100820Thanh toan dat phong630452b4
+    [applink] => https://test-applinks.momo.vn/payment/v2?action=payWithApp&isScanQR=false&scanQR=false&serviceType=app&sid=TU9NT0JLVU4yMDE4MDUyOXwxNzc3MTk4NDAw&v=3.0&deeplinkCallback=http%3A%2F%2Flocalhost%2Fkhachsan%2Fmomo_return.php&callBackUrl=http%3A%2F%2Flocalhost%2Fkhachsan%2Fmomo_return.php
+    [deeplinkMiniApp] => momo://app?action=payWithApp&isScanQR=false&scanQR=false&serviceType=miniapp&sid=TU9NT0JLVU4yMDE4MDUyOXwxNzc3MTk4NDAw&v=3.0
+    [signature] => 2ce947884d9f203585d02f011a6db61d2633d91f0176fe0bff0814e4e7c4700d
+)

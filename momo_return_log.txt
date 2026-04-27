@@ -1,0 +1,80 @@
+2026-04-26 12:18:55
+GET PARAMS:
+Array
+(
+    [partnerCode] => MOMOBKUN20180529
+    [orderId] => 1777198400
+    [requestId] => 1777198400
+    [amount] => 250000
+    [orderInfo] => Thanh toán đặt phòng
+    [orderType] => momo_wallet
+    [transId] => 4732044551
+    [resultCode] => 99
+    [message] => Lỗi không xác định. Vui lòng liên hệ MoMo để biết thêm chi tiết.
+    [payType] => aio_qr
+    [responseTime] => 1777198425771
+    [extraData] => 
+    [signature] => 311f25e1670df1404cc5275d9beb075df5382592d9b1eb1f6f0abf4bc212b2ed
+)
+
+Signature valid: YES
+Expected: 311f25e1670df1404cc5275d9beb075df5382592d9b1eb1f6f0abf4bc212b2ed
+Received: 311f25e1670df1404cc5275d9beb075df5382592d9b1eb1f6f0abf4bc212b2ed
+=================
+2026-04-26 12:37:35
+RETURN PARAMS:
+Array
+(
+    [partnerCode] => MOMOBKUN20180529
+    [orderId] => ORD_111777199827
+    [requestId] => 1777199827
+    [amount] => 500000
+    [orderInfo] => Thanh toán qua MoMo
+    [orderType] => momo_wallet
+    [transId] => 4732044886
+    [resultCode] => 99
+    [message] => Lỗi không xác định. Vui lòng liên hệ MoMo để biết thêm chi tiết.
+    [payType] => aio_qr
+    [responseTime] => 1777199853094
+    [extraData] => 
+    [signature] => fdb40106bd42983249295324b48d950680ead761e28fdff258dc705b46d93b13
+)
+
+2026-04-26 12:50:56
+RETURN PARAMS:
+Array
+(
+    [partnerCode] => MOMOBKUN20180529
+    [orderId] => ORD_111777200631
+    [requestId] => 1777200631
+    [amount] => 250000
+    [orderInfo] => Thanh toán qua MoMo
+    [orderType] => momo_wallet
+    [transId] => 4732068556
+    [resultCode] => 99
+    [message] => Lỗi không xác định. Vui lòng liên hệ MoMo để biết thêm chi tiết.
+    [payType] => aio_qr
+    [responseTime] => 1777200653725
+    [extraData] => 
+    [signature] => 9f1277d23b85946d52bb510a1f0b6140c55f2e23232c9d4b525a34cdecf29d93
+)
+
+2026-04-26 15:24:00
+RETURN PARAMS:
+Array
+(
+    [partnerCode] => MOMOBKUN20180529
+    [orderId] => ORD_111777208826
+    [requestId] => 1777209830
+    [amount] => 250000
+    [orderInfo] => Thanh toán qua MoMo
+    [orderType] => momo_wallet
+    [transId] => 1777209840119
+    [resultCode] => 1006
+    [message] => Giao dịch bị từ chối bởi người dùng.
+    [payType] => 
+    [responseTime] => 1777209840154
+    [extraData] => 
+    [signature] => 735e1c8d43deb2eb7c2dc7a518e0a185b9faa5ddd6b85c2572ff09b602680a21
+)
+

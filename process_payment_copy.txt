@@ -1,0 +1,149 @@
+<?php
+
+require('admin/inc/db_config.php');
+require('admin/inc/essentials.php');
+require('inc/email_functions.php');
+
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+
+session_start();
+
+// check login
+if (!(isset($_SESSION['login']) && $_SESSION['login'] == true)) {
+  redirect('index.php');
+}
+
+// check method
+if (!isset($_POST['payment_method'])) {
+  redirect('pay_ment.php');
+  exit;
+}
+
+$frm_data = filteration($_POST);
+$payment_method = $frm_data['payment_method'];
+
+// lấy data chung
+$booking_data = $_SESSION['booking_data'];
+$CUST_ID = $_SESSION['uId'];
+$ROOM_ID = $_SESSION['room']['id'];
+$TXN_AMOUNT = $_SESSION['payment_amount']; // 50%
+$TOTAL_AMOUNT = $_SESSION['total_amount'];
+
+$ORDER_ID = 'ORD_' . $CUST_ID . random_int(11111, 9999999);
+$_SESSION['ORDER_ID'] = $ORDER_ID;
+
+
+// =======================
+// 👉 CASE 1: MOMO
+// =======================
+if ($payment_method == 'ewallet') {
+
+  // lưu order pending
+  insert("INSERT INTO booking_order(user_id, room_id, check_in, check_out, order_id, booking_status) 
+  VALUES (?,?,?,?,?,'pending')", [
+    $CUST_ID,
+    $ROOM_ID,
+    $booking_data['checkin'],
+    $booking_data['checkout'],
+    $ORDER_ID
+  ], 'issss');
+
+  // lưu session tạm
+  $_SESSION['temp_booking'] = [
+    'room' => $_SESSION['room'],
+    'booking_data' => $booking_data,
+    'payment_amount' => $TXN_AMOUNT,
+    'total_amount' => $TOTAL_AMOUNT,
+    'user_id' => $CUST_ID
+  ];
+
+  // chuyển qua MOMO
+  header("Location: process_momo.php");
+  exit;
+}
+
+
+// =======================
+// CASE 2: CARD (JCB/VISA)
+// =======================
+if ($payment_method == 'card') {
+
+  // insert booking_order
+  $query1 = "INSERT INTO booking_order 
+  (user_id, room_id, check_in, check_out, order_id, trans_amt, booking_status, trans_status) 
+  VALUES (?,?,?,?,?,?,'Đã Thanh Toán 50%','Đã nhận 50%')";
+
+  insert($query1, [
+    $CUST_ID,
+    $ROOM_ID,
+    $booking_data['checkin'],
+    $booking_data['checkout'],
+    $ORDER_ID,
+    $TXN_AMOUNT
+  ], 'issssi');
+
+  $booking_id = mysqli_insert_id($con);
+
+  // insert booking_details
+  $query2 = "INSERT INTO booking_details
+  (booking_id, room_name, price, total_pay, user_name, phonenum, address)
+  VALUES (?,?,?,?,?,?,?)";
+
+  insert($query2, [
+    $booking_id,
+    $_SESSION['room']['name'],
+    $_SESSION['room']['price'],
+    $TOTAL_AMOUNT,
+    $booking_data['name'],
+    $booking_data['phonenum'],
+    $booking_data['address']
+  ], 'issssss');
+
+  redirect("bookings.php");
+  exit;
+
+  
+
+  // trừ phòng
+  $num_rooms = $booking_data['num_rooms'];
+
+  $res = select("SELECT quantity FROM rooms WHERE id=?", [$ROOM_ID], 'i');
+
+  if ($res && mysqli_num_rows($res) > 0) {
+    $room = mysqli_fetch_assoc($res);
+    $new_quantity = $room['quantity'] - $num_rooms;
+
+    if ($new_quantity >= 0) {
+      update("UPDATE rooms SET quantity=? WHERE id=?", [$new_quantity, $ROOM_ID], 'ii');
+    } else {
+      $_SESSION['booking_error'] = "Không đủ phòng!";
+      redirect("rooms.php");
+      exit;
+    }
+  }
+
+  // gửi mail
+  $user_res = select("SELECT email, name FROM user_cred WHERE id=?", [$CUST_ID], 'i');
+  $user = mysqli_fetch_assoc($user_res);
+
+  $email_data = [
+    'order_id' => $ORDER_ID,
+    'room_name' => $_SESSION['room']['name'],
+    'checkin' => date('d/m/Y', strtotime($booking_data['checkin'])),
+    'checkout' => date('d/m/Y', strtotime($booking_data['checkout'])),
+    'paid_amount' => $TXN_AMOUNT,
+    'remaining_amount' => $TXN_AMOUNT
+  ];
+
+  send_booking_email($user['email'], $user['name'], $email_data, 'payment_50_confirmed');
+
+  // clear session
+  unset($_SESSION['booking_data']);
+  unset($_SESSION['payment_amount']);
+  unset($_SESSION['total_amount']);
+  unset($_SESSION['remaining_amount']);
+
+  $_SESSION['booking_success'] = "Thanh toán thẻ thành công! Mã đơn: $ORDER_ID";
+
+  redirect("bookings.php");
+}
